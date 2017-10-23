@@ -3,6 +3,8 @@
 
 bool validate_card(long long card_number);
 
+int count_digits(long long card_number);
+
 int get_card_id(long long card_number);
 
 int main(void)
@@ -16,7 +18,9 @@ int main(void)
     }
     while (card_number < 0);
 
+    // Checksum to validate card
     bool is_valid = validate_card(card_number);
+    int digit_count = count_digits(card_number);
 
     if(!is_valid)
     {
@@ -30,15 +34,36 @@ int main(void)
         {
             case 34:
             case 37:
-                printf("AMEX\n");
+                if (digit_count == 15)
+                {
+                    printf("AMEX\n");
+                }
                 break;
-            case
+            case 51:
+            case 52:
+            case 53:
+            case 54:
+            case 55:
+                if (digit_count == 16)
+                {
+                    printf("MASTERCARD\n");
+                }
+                break;
+            default:
+                if ((card_id /= 10) == 4 && (digit_count == 13 || digit_count == 16))
+                {
+                    printf("VISA\n");
+                }
+                else
+                {
+                    printf("INVALID\n");
+                }
+
         }
     }
-
-    printf("For number %lld, the card is %d\n", card_number, is_valid);
 }
 
+// Calculates checksum of credit card
 bool validate_card(long long card_number)
 {
     bool is_even_digit = false;
@@ -76,6 +101,7 @@ bool validate_card(long long card_number)
     return (sum_odd_digits % 10) == 0;
 }
 
+// Returns first two digits of card number
 int get_card_id(long long card_number)
 {
     while(card_number >= 100)
@@ -86,4 +112,18 @@ int get_card_id(long long card_number)
     int card_id = card_number;
 
     return card_id;
+}
+
+// Returns number of digits in card number
+int count_digits(long long card_number)
+{
+    int num_digits = 0;
+
+    while(card_number > 0)
+    {
+        card_number /= 10;
+        num_digits++;
+    }
+
+    return num_digits;
 }
