@@ -14,7 +14,32 @@
  */
 bool search(int value, int values[], int n)
 {
-    // TODO: implement a searching algorithm
+    // Binary search O(log(n))
+    int lower_index = 0;
+    int upper_index = n - 1;
+
+    do
+    {
+        // Check middle index
+        int middle_index = (lower_index + upper_index) / 2;
+
+        if (values[middle_index] == value)
+        {
+            return true;
+        }
+
+        // Reassign upper and lower index for next search
+        if (values[middle_index] > value)
+        {
+            upper_index = middle_index - 1;
+        }
+        else
+        {
+            lower_index = middle_index + 1;
+        }
+    }
+    while (upper_index >= lower_index);
+
     return false;
 }
 
